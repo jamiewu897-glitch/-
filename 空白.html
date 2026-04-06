@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>餐馆英语训练版</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body { background:#f8fafc; font-family:sans-serif; }
+
+.card {
+    background:white;
+    padding:14px;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.hidden-en .en { display:none; }
+.show-en .en { display:block; }
+.show-en .cn { display:none; }
+
+button { border-radius:10px; }
+</style>
+</head>
+
+<body class="p-4 space-y-4">
+
+<h1 class="text-xl font-bold">🍜 餐馆英语训练（实战版）</h1>
+
+<!-- 模式按钮 -->
+<div class="flex gap-2">
+<button onclick="toggleMode()" class="bg-blue-600 text-white px-3 py-2">
+切换：先猜再看
+</button>
+
+<button onclick="workMode()" class="bg-green-600 text-white px-3 py-2">
+🎧 上班模式
+</button>
+</div>
+
+<!-- 句子卡片 -->
+<div id="list" class="space-y-3 hidden-en">
+
+<div class="card" onclick="speakTrain('Ready to order?')">
+<p class="cn">准备点餐了吗？</p>
+<p class="en text-gray-500">Ready to order?</p>
+</div>
+
+<div class="card" onclick="speakTrain('Dine in or takeaway?')">
+<p class="cn">堂食还是打包？</p>
+<p class="en text-gray-500">Dine in or takeaway?</p>
+</div>
+
+<div class="card" onclick="speakTrain('This one is a bit spicy, is that okay?')">
+<p class="cn">这个有点辣，可以吗？</p>
+<p class="en text-gray-500">This one is a bit spicy, is that okay?</p>
+</div>
+
+<div class="card" onclick="speakTrain('It will take about ten minutes')">
+<p class="cn">大概需要10分钟</p>
+<p class="en text-gray-500">It will take about ten minutes</p>
+</div>
+
+<div class="card" onclick="speakTrain('Anything else?')">
+<p class="cn">还需要别的吗？</p>
+<p class="en text-gray-500">Anything else?</p>
+</div>
+
+</div>
+
+<script>
+
+// 跟读训练
+function speakTrain(text){
+
+    window.speechSynthesis.cancel();
+
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = 'en-AU';
+    msg.rate = 0.9;
+
+    // 播放1
+    speechSynthesis.speak(msg);
+
+    // 播放2
+    setTimeout(()=>{
+        speechSynthesis.speak(msg);
+    },2000);
+
+}
+
+// 切换模式（先猜再看）
+function toggleMode(){
+    document.getElementById('list').classList.toggle('show-en');
+}
+
+// 上班模式（自动播放）
+function workMode(){
+
+    const lines = [
+        "Ready to order?",
+        "Dine in or takeaway?",
+        "This one is a bit spicy",
+        "It will take about ten minutes",
+        "Anything else?"
+    ];
+
+    let i = 0;
+
+    function playNext(){
+        if(i >= lines.length) return;
+
+        speakTrain(lines[i]);
+        i++;
+
+        setTimeout(playNext,4000);
+    }
+
+    playNext();
+}
+
+</script>
+
+</body>
+</html>
